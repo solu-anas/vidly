@@ -9,5 +9,6 @@ require('./startup/config')();
 require('./startup/validation')();
 
 const port = process.env.PORT || 8000;
-app.listen(port, () => { winston.info(`Listening to Port ${port} ...`) });
-console.log(process.env.NODE_ENV);
+const server = app.listen(port, () => { winston.info(`Listening to Port ${port} ...`) });
+
+module.exports = server;

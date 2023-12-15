@@ -1,3 +1,4 @@
+const validateObjectId = require('../middleware/validateObjectId');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const { Genre, validate } = require('../models/genre');
@@ -12,19 +13,10 @@ genresRouter.get('/', async (req, res) => {
 });
 
 // Getting a genre by ID
-genresRouter.get('/:id', async (req, res) => {
+genresRouter.get('/:id', validateObjectId, async (req, res) => {
     const genre = await Genre.findById(req.params.id);
 
     if (!genre) return res.status(404).send("The genre with the given ID does not exist");
-
-    res.send(genre);
-});
-
-// Getting a genre by Name
-genresRouter.get('/:name', async (req, res) => {
-    const genre = await Genre.findOne({ name: req.params.name });
-
-    if (!genre) return res.status(404).send("This genre name does not exist");
 
     res.send(genre);
 });
@@ -40,7 +32,7 @@ genresRouter.post('/', auth, async (req, res) => {
 });
 
 // Update a genre by their id
-genresRouter.put('/:id', async (req, res) => {
+genresRouter.put('/:id', [auth, validateObjectId], async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -51,7 +43,7 @@ genresRouter.put('/:id', async (req, res) => {
 });
 
 // Delete a genre
-genresRouter.delete('/:id', [auth, admin], async (req, res) => {
+genresRouter.delete('/:id', [auth, admin, validateObjectId], async (req, res) => {
     const genre = await Genre.findByIdAndDelete(req.params.id);
     if (!genre) return res.status(404).send('The genre with the given ID does not exist.');
     res.send(genre);
