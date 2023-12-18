@@ -3,9 +3,14 @@ const { User } = require('../../models/user');
 const { Genre } = require('../../models/genre');
 
 describe('authorization middleware', () => {
-    beforeEach(() => { server = require('../../index') });
+    let server;
+    
+    beforeEach(() => {
+        server = require('../../index')
+    });
+    
     afterEach(async () => {
-        server.close();
+        await server.close();
         await Genre.collection.drop();
     });
 

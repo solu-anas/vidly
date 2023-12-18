@@ -15,7 +15,7 @@ rentalsRouter.get('/', async (req, res) => {
         .sort('-dateOut');
 
     res.send(rentals);
-})
+});
 
 // Create a new Rental
 rentalsRouter.post('/', async (req, res) => {
